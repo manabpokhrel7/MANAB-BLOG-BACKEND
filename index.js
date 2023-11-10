@@ -43,23 +43,6 @@ app.set('view engine', 'edge');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Setup session middleware
-const sessionMiddleware = expressSession({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: true,
-    store: new connectMongo({
-        mongooseConnection: mongoose.connection,
-        mongoUrl: 'mongodb://127.0.0.1/your-database-name', // Replace with your actual database name
-    }),
-});
-
-
-app.use(sessionMiddleware);
-app.get('/posts/new', auth, createPostController);
-
-//Storing Sessions In MongoDB
-
 
 app.get('/', async (req, res) => {
     const posts = await Post.find({});
