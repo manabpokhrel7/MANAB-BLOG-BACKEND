@@ -12,16 +12,22 @@ const createPostController = require('./controllers/createPost');
 
 
 
+
 mongoose.connect('mongodb://127.0.0.1/manab', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-    .then(() => {
-        console.log('Connected to MongoDB');
-    })
-    .catch((error) => {
-        console.error('Error connecting to MongoDB:', error);
-    });
+});
+
+const db = mongoose.connection;
+
+db.on('error', (error) => {
+  console.error('Error connecting to MongoDB:', error);
+});
+
+db.once('open', () => {
+  console.log('Connected to MongoDB');
+});
+
+
+
 
 const app = express();
 
