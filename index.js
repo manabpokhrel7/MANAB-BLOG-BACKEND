@@ -5,34 +5,59 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Post = require('./database/models/Posts');
 const fileUpload = require("express-fileupload");
+const expressSession = require('express-session');
+const connectMongo = require('connect-mongo');
+const auth = require("./middleware/auth");
+const createPostController = require('./controllers/createPost');
 
-mongoose.connect('mongodb://127.0.0.1/', {
+
+
+mongoose.connect('mongodb://127.0.0.1/manab', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,
 })
-.then(() => {
-    console.log('Connected to MongoDB');
-})
-.catch((error) => {
-    console.error('Error connecting to MongoDB:', error);
-});
+    .then(() => {
+        console.log('Connected to MongoDB');
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error);
+    });
 
-const app = new express();
+const app = express();
 
+
+//Storing Sessions In MongoDB// this is supposed to be at the end but code doesnt work there
+// Setup view engine
 app.use(expressEdge);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'edge');
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+
+
+// Setup body parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Setup session middleware
+const sessionMiddleware = expressSession({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    store: new connectMongo({
+        mongooseConnection: mongoose.connection,
+        mongoUrl: 'mongodb://127.0.0.1/your-database-name', // Replace with your actual database name
+    }),
+});
+
+
+app.use(sessionMiddleware);
+app.get('/posts/new', auth, createPostController);
+
+//Storing Sessions In MongoDB
+
 
 app.get('/', async (req, res) => {
-    const posts = await Post.find({})
-    res.render('index', {
-        posts
-    })
+    const posts = await Post.find({});
+    res.render('index', { posts });
 });
 
 app.use(express.static('public'));
@@ -48,9 +73,11 @@ app.get('/contact', (req, res) => {
 app.get('/post/:id', async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
-        res.render('post', {
-            post
-        });
+        if (!post) {
+            // Handle the case where the post with the given ID is not found
+            return res.status(404).send('Post not found');
+        }
+        res.render('post', { post });
     } catch (error) {
         console.error('Error fetching post:', error);
         res.status(500).send('Internal Server Error');
@@ -58,15 +85,15 @@ app.get('/post/:id', async (req, res) => {
 });
 
 app.get('/posts/new', (req, res) => {
-    res.render('create')
+    res.render('create');
 });
+
 app.use(fileUpload());
 app.post("/posts/store", async (req, res) => {
     try {
         const { image } = req.files;
 
         if (!image) {
-            // Handle the case where the file is not provided
             return res.status(400).send('No file uploaded');
         }
 
@@ -78,10 +105,12 @@ app.post("/posts/store", async (req, res) => {
     }
 });
 
-
 app.listen(4000, () => {
     console.log('App listening on port 4000');
 });
+
+
+// Handle user registration and authentication routes...
 
 
 const storePost = require('./middleware/storePost')
@@ -89,8 +118,3 @@ app.use('/posts/store', storePost)
 
 
 //this is upto user registration everything is done like adding posts image blog from now on its for user auth//
-
-
-const createUserController = require("./controllers/createUser");
-
-app.get("/auth/register", createUserController);
