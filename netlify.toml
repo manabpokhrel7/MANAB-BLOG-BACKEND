@@ -1,0 +1,8 @@
+[build]
+  command = "npm start"  # Use the correct command to start your app
+  publish = "public"     # Specify the directory to publish (your build output)
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
