@@ -13,7 +13,7 @@ const createPostController = require('./controllers/createPost');
 
 
 
-mongoose.connect('mongodb://127.0.0.1/manab', {
+mongoose.connect('mongodb+srv://Manab:Biratnagar77@atlascluster.7vnhsfk.mongodb.net/mydatabase?retryWrites=true&w=majority', {
 });
 
 const db = mongoose.connection;
