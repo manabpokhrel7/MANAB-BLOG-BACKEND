@@ -27,9 +27,9 @@ module.exports = {
       zlib: require.resolve('browserify-zlib'),
       assert: require.resolve('assert/'),
       crypto: require.resolve('crypto-browserify'),
-      http: require.resolve('http-browserify'),
+      http: require.resolve('http-browserify'), // Include http-browserify
       https: require.resolve('https-browserify'),
-      os: require.resolve('os-browserify/browser'), // Include os-browserify/browser
+      os: require.resolve('os-browserify/browser'),
       process: require.resolve('process/browser'),
       punycode: require.resolve('punycode/'),
       querystring: require.resolve('querystring-es3/'),
@@ -42,6 +42,6 @@ module.exports = {
       vm: require.resolve('vm-browserify'),
       zlib: require.resolve('browserify-zlib'),
     },
-  },
+  },  
   // Other configurations go here
 };
