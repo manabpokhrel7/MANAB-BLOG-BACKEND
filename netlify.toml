@@ -1,11 +1,10 @@
 [build]
-  command = "npm start"  # Assuming this is the command to start your app in production
-  publish = "public"
+command = "npm run build"
+publish = "public"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  NODE_VERSION = "18.17.0"
+  force = true
+  conditions = {Path = ["!^/loadAppEdge"]}

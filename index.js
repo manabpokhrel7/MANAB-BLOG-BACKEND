@@ -4,17 +4,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Post = require('./database/models/Posts');
-const fileUpload = require("express-fileupload");
+const fileUpload = require('express-fileupload');
 const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
-const auth = require("./middleware/auth");
+const auth = require('./middleware/auth');
 const createPostController = require('./controllers/createPost');
+const cors = require('cors');
+const fs = require('fs');
 
-
-
-
-mongoose.connect('mongodb+srv://Manab:Biratnagar77@atlascluster.7vnhsfk.mongodb.net/mydatabase?retryWrites=true&w=majority', {
-});
+mongoose.connect('mongodb+srv://Manab:Biratnagar77@atlascluster.7vnhsfk.mongodb.net/mydatabase?retryWrites=true&w=majority', {});
 
 const db = mongoose.connection;
 
@@ -26,22 +24,47 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-
-
-
 const app = express();
 
+// Enable CORS with specific options
+app.use(cors({
+    origin: 'http://localhost:8888', // Change this to the actual origin of your frontend server
+    methods: 'GET',
+    optionsSuccessStatus: 200,
+}));
 
-//Storing Sessions In MongoDB// this is supposed to be at the end but code doesnt work there
+// Storing Sessions In MongoDB
 // Setup view engine
 app.use(expressEdge);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'edge');
 
-
 // Setup body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/loadAppEdge', (req, res) => {
+    try {
+        const appEdgeContent = fs.readFileSync(path.join(__dirname, 'views/layouts/app.edge'), 'utf-8');
+        res.send(appEdgeContent);
+    } catch (error) {
+        console.error('Error reading app.edge:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+// Add a new route to handle the client-side request
+app.get('/fetchAppEdge', (req, res) => {
+    try {
+        const appEdgeContent = fs.readFileSync(path.join(__dirname, 'views/layouts/app.edge'), 'utf-8');
+        res.send(appEdgeContent);
+    } catch (error) {
+        console.error('Error reading app.edge:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+// ... (existing code)
 
 
 app.get('/', async (req, res) => {
