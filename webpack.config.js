@@ -26,7 +26,7 @@ module.exports = {
       stream: require.resolve('stream-browserify'),
       zlib: require.resolve('browserify-zlib'),
       dns: require.resolve('dns'),
-      url: require.resolve('url/'),
+      url: require.resolve('url'),
       timers: require.resolve('timers-browserify'),
       http: require.resolve('stream-http'),
       os: require.resolve('os-browserify/browser'),
