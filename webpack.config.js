@@ -28,8 +28,8 @@ module.exports = {
       dns: require.resolve('dns'),
       url: require.resolve('url'),
       timers: require.resolve('timers-browserify'),
-      http: require.resolve('http'), // Update to use the http module directly
-      os: require.resolve('os-browserify/browser'),
+      http: require.resolve('http'),
+      os: require.resolve('os-browserify/browser'), // Include os-browserify/browser
       buffer: require.resolve('buffer/'),
       process: require.resolve('process/browser'),
     },
