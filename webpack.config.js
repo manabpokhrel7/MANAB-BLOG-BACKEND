@@ -28,7 +28,7 @@ module.exports = {
       dns: require.resolve('dns'),
       url: require.resolve('url'),
       timers: require.resolve('timers-browserify'),
-      http: require.resolve('http-browserify'), // Revert back to http-browserify
+      http: require.resolve('http'), // Update to use the http module directly
       os: require.resolve('os-browserify/browser'),
       buffer: require.resolve('buffer/'),
       process: require.resolve('process/browser'),
