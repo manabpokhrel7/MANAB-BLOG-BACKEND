@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack'); // Add this line
 
 module.exports = {
   entry: './index.js',
@@ -10,12 +11,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/, // Apply this rule to files ending in .js
-        exclude: /node_modules/, // Don't apply to files residing in node_modules
+        test: /\.js$/,
+        exclude: /node_modules/,
         use: {
-          loader: 'babel-loader', // Use the Babel loader
+          loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'], // Use the @babel/preset-env preset
+            presets: ['@babel/preset-env'],
           },
         },
       },
