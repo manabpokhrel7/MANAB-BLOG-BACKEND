@@ -23,23 +23,26 @@ module.exports = {
   },
   resolve: {
     fallback: {
-      stream: require.resolve('stream-browserify'),
-      zlib: require.resolve('browserify-zlib'),
       assert: require.resolve('assert/'),
+      stream: require.resolve('stream-browserify'),
       crypto: require.resolve('crypto-browserify'),
-      http: require.resolve('stream-http'),
+      http: require.resolve('http-browserify'),
       https: require.resolve('https-browserify'),
       os: require.resolve('os-browserify/browser'),
+      vm: require.resolve('vm-browserify'),
+      buffer: require.resolve('buffer/'),
+      constants: require.resolve('constants-browserify'),
       process: require.resolve('process/browser'),
       punycode: require.resolve('punycode/'),
       querystring: require.resolve('querystring-es3/'),
-      string_decoder: require.resolve('string_decoder/'),
-      timers: require.resolve('timers-browserify'),
-      tty: require.resolve('tty-browserify'),
       url: require.resolve('url/'),
       util: require.resolve('util/'),
-      vm: require.resolve('vm-browserify'),
-      zlib: require.resolve('browserify-zlib'),
     },
   },
+  
+  plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+  ],
 };
