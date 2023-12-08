@@ -1,2 +1,6 @@
 # Local Netlify folder
 .netlify
+# Ignore node_modules
+node_modules/
+# Ignore log files
+*.log
