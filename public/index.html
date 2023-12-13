@@ -13,6 +13,7 @@
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
+    <div id="appEdgeContainer"></div>
     <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="index.html">Manab</a>
@@ -149,23 +150,28 @@
 
         // Function to load app.edge content
         <script>
-    function loadAppEdge() {
-        // Update the URL with the correct port
-        const serverPort = 3999; // Change this to your actual server port
-        const url = `http://localhost:${serverPort}/loadAppEdge`;
+            function loadAppEdge() {
+    const serverHost = 'http://localhost'; // Change this to your actual server host
+    const serverPort = 4000; // Change this to your actual server port
+    const url = `${serverHost}:${serverPort}`; // Adjust the URL
 
-        // Fetch the content from the server
-        fetch(url)
-            .then(response => response.text())
-            .then(htmlContent => {
-                // Update the container with the app.edge content
-                document.getElementById('appEdgeContainer').innerHTML = htmlContent;
-            })
-            .catch(error => {
-                console.error('Error loading app.edge:', error);
-            });
-    }
-    </script>
-    
+    fetch(url, { mode: 'cors' })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load: ${response.statusText}`);
+            }
+            return response.text();
+        })
+        .then(htmlContent => {
+            document.open();
+            document.write(htmlContent);
+            document.close();
+        })
+        .catch(error => {
+            console.error('Error loading index.edge:', error);
+        });
+}
+
+        </script>
 </body>
 </html>
